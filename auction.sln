@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionService", "src\AuctionService\AuctionService.csproj", "{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9C6578E7-E4FE-79BB-1635-F363CC1E80DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Debug|x64.Build.0 = Debug|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Debug|x86.Build.0 = Debug|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Release|x64.ActiveCfg = Release|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Release|x64.Build.0 = Release|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Release|x86.ActiveCfg = Release|Any CPU
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EECE1DFC-75B3-4E7B-B553-1B30835AD95F} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+EndGlobal

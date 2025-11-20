@@ -5,10 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AuctionDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("AuctionDatabase"),
-        b => b.MigrationsAssembly("AuctionService"));
-});
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
