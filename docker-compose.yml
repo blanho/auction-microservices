@@ -56,6 +56,8 @@ services:
       Logging__LogLevel__Microsoft.AspNetCore: Warning
     ports:
       - "5000:8080"
+    volumes:
+      - auction_api_logs:/app/logs
     depends_on:
       - auction-postgres
       - redis

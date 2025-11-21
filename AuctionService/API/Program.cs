@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure logging
+builder.AddApplicationLogging();
+
 // Common services
 builder.Services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
 builder.Services.AddSingleton<ICorrelationIdProvider, CorrelationIdProvider>();

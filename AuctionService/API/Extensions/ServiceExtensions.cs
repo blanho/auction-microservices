@@ -9,11 +9,29 @@ using Common.Caching.Implementations;
 using Common.Repository.Interfaces;
 using Common.Repository.Implementations;
 using AutoMapper;
+using Serilog;
 
 namespace AuctionService.API.Extensions
 {
     public static class ServiceExtensions
     {
+        /// <summary>
+        /// Configures Serilog for the application.
+        /// </summary>
+        public static WebApplicationBuilder AddApplicationLogging(this WebApplicationBuilder builder)
+        {
+            builder.Host.UseSerilog((context, loggerConfig) =>
+            {
+                loggerConfig
+                    .ReadFrom.Configuration(context.Configuration)
+                    .Enrich.FromLogContext()
+                    .Enrich.WithMachineName()
+                    .Enrich.WithEnvironmentUserName();
+            });
+
+            return builder;
+        }
+
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
