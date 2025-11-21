@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AuctionService.Infrastructure.Data;
+using Common.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Common.Application.Abstractions;
 
 namespace AuctionService.Infrastructure.Upgrades;
 

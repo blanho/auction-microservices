@@ -2,7 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\AuctionService.Domain.csproj" />
-    <ProjectReference Include="..\..\Common\Application\Common.Application.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Core\Common.Core.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Repository\Common.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

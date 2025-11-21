@@ -1,0 +1,21 @@
+namespace Common.Core.Helpers;
+
+/// <summary>
+/// Represents a domain or application error with code and message.
+/// </summary>
+public sealed record Error
+{
+    public string Code { get; }
+    public string Message { get; }
+
+    private Error(string code, string message)
+    {
+        Code = code;
+        Message = message;
+    }
+
+    public static Error Create(string code, string message) => new(code, message);
+
+    public static readonly Error None = new(string.Empty, string.Empty);
+    public static readonly Error NullValue = new("Error.NullValue", "A null value was provided.");
+}

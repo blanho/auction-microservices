@@ -19,8 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\AuctionService.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\AuctionService.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Common\Infrastructure\Common.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Common\API\Common.API.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Core\Common.Core.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Logging\Common.Logging.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Caching\Common.Caching.csproj" />
+    <ProjectReference Include="..\..\Common\Common.OpenApi\Common.OpenApi.csproj" />
   </ItemGroup>
 
 </Project>

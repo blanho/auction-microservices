@@ -1,6 +1,4 @@
-﻿// ...existing code...
-
-using Common.Domain.Entities;
+﻿using Common.Domain.Entities;
 
 namespace AuctionService.Domain.Entities
 {

@@ -1,18 +1,29 @@
 using AuctionService.API.Extensions;
 using AuctionService.Infrastructure.Data;
-using Common.Infrastructure.Extensions;
-using Common.API.Extensions;
+using Common.OpenApi.Extensions;
+using Common.OpenApi.Middleware;
+using Common.Caching.Abstractions;
+using Common.Caching.Implementations;
+using Common.Core.Interfaces;
+using Common.Core.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCommonLogging();
-builder.Services.AddCorrelationId();
+
+// Common services
+builder.Services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
+builder.Services.AddSingleton<ICorrelationIdProvider, CorrelationIdProvider>();
+
+// Caching
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
-builder.Services.AddDistributedCacheService();
-builder.Services.AddCommonUtilities();
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
+// Application services
 builder.Services.AddApplicationServices(builder.Configuration);
+
+// OpenAPI
 builder.Services.AddCommonApiVersioning();
 builder.Services.AddCommonOpenApi();
 
@@ -27,8 +38,7 @@ if (!string.IsNullOrWhiteSpace(pathBase))
     app.UsePathBase(pathBase);
 }
 
-app.UseCorrelationId();
-app.UseCommonExceptionHandling();
+app.UseAppExceptionHandling();
 
 // Health check endpoint (used by Docker healthcheck)
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))

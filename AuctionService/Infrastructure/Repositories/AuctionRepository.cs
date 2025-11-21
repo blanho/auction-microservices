@@ -2,7 +2,7 @@ using AuctionService.Application.Interfaces;
 using AuctionService.Domain.Entities;
 using AuctionService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Common.Application.Abstractions;
+using Common.Core.Interfaces;
 
 namespace AuctionService.Infrastructure.Repositories
 {
@@ -17,7 +17,7 @@ namespace AuctionService.Infrastructure.Repositories
             _dateTime = dateTime;
         }
 
-        public async Task<IEnumerable<Auction>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<Auction>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Auctions
                 .Where(x => !x.IsDeleted)
@@ -37,7 +37,7 @@ namespace AuctionService.Infrastructure.Repositories
         public async Task<Auction> CreateAsync(Auction auction, CancellationToken cancellationToken = default)
         {
             auction.CreatedAt = _dateTime.UtcNow;
-            auction.CreatedBy = auction.Seller;
+            auction.CreatedBy = Guid.Empty; // TODO: Set from authenticated user
             
             await _context.Auctions.AddAsync(auction, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -60,7 +60,7 @@ namespace AuctionService.Infrastructure.Repositories
         public async Task UpdateAsync(Auction auction, CancellationToken cancellationToken = default)
         {
             auction.UpdatedAt = _dateTime.UtcNow;
-            auction.UpdatedBy = auction.Seller;
+            auction.UpdatedBy = Guid.Empty; // TODO: Set from authenticated user
             
             _context.Auctions.Update(auction);
             await _context.SaveChangesAsync(cancellationToken);
@@ -84,7 +84,7 @@ namespace AuctionService.Infrastructure.Repositories
             {
                 auction.IsDeleted = true;
                 auction.DeletedAt = _dateTime.UtcNow;
-                auction.DeletedBy = auction.Seller;
+                auction.DeletedBy = Guid.Empty; // TODO: Set from authenticated user
                 
                 _context.Auctions.Update(auction);
                 await _context.SaveChangesAsync(cancellationToken);

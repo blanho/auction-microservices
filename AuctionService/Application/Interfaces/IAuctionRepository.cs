@@ -1,10 +1,11 @@
 using AuctionService.Domain.Entities;
-using Common.Application.Interfaces;
+using Common.Repository.Interfaces;
 
-namespace AuctionService.Application.Interfaces
+namespace AuctionService.Application.Interfaces;
+
+public interface IAuctionRepository : IRepository<Auction>
 {
-    public interface IAuctionRepository : IRepository<Auction>
-    {
-        
-    }
+    Task<IEnumerable<Auction>> AddRangeAsync(IEnumerable<Auction> auctions, CancellationToken cancellationToken = default);
+    Task UpdateRangeAsync(IEnumerable<Auction> auctions, CancellationToken cancellationToken = default);
+    Task DeleteRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
 }

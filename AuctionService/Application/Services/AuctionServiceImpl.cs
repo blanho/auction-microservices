@@ -1,8 +1,9 @@
 using AuctionService.Application.DTOs;
 using AuctionService.Application.Interfaces;
 using AutoMapper;
-using Common.Application.Abstractions;
-using Common.Application.Errors;
+using Common.Core.Exceptions;
+using Common.Core.Interfaces;
+using Common.Repository.Interfaces;
 
 namespace AuctionService.Application.Services;
 
