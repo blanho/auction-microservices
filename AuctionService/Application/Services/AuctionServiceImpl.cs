@@ -34,7 +34,7 @@ public class AuctionServiceImpl : IAuctionService
         var auctions = await _repository.GetAllAsync(cancellationToken);
         var result = auctions.Select(a => _mapper.Map<AuctionDto>(a)).ToList();
         
-        _logger.LogInformation("Retrieved {Count} auctions", result.Count);
+        _logger.LogInformation("Retrieved {Count} auctions (check cache decorator logs for cache hit/miss)", result.Count);
         return result;
     }
 

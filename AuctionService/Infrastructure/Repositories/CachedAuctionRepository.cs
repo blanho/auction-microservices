@@ -3,6 +3,8 @@ using AuctionService.Domain.Entities;
 using AutoMapper;
 using Common.Caching.Abstractions;
 using Common.Caching.Keys;
+using Common.Repository.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace AuctionService.Infrastructure.Repositories;
 
@@ -11,14 +13,16 @@ public class CachedAuctionRepository : IAuctionRepository
     private readonly IAuctionRepository _inner;
     private readonly ICacheService _cache;
     private readonly IMapper _mapper;
+    private readonly IAppLogger<CachedAuctionRepository> _logger;
     private static readonly TimeSpan SingleAuctionTtl = TimeSpan.FromMinutes(10);
     private static readonly TimeSpan AuctionListTtl = TimeSpan.FromMinutes(1);
 
-    public CachedAuctionRepository(IAuctionRepository inner, ICacheService cache, IMapper mapper)
+    public CachedAuctionRepository(IAuctionRepository inner, ICacheService cache, IMapper mapper, IAppLogger<CachedAuctionRepository> logger)
     {
         _inner = inner;
         _cache = cache;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<List<Auction>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -27,9 +31,11 @@ public class CachedAuctionRepository : IAuctionRepository
         var cachedDtos = await _cache.GetAsync<List<Application.DTOs.AuctionDto>>(key, cancellationToken);
         if (cachedDtos != null)
         {
+            _logger.LogInformation("Cache HIT for all auctions");
             return _mapper.Map<List<Auction>>(cachedDtos);
         }
 
+        _logger.LogInformation("Cache MISS for all auctions - fetching from database");
         var auctions = await _inner.GetAllAsync(cancellationToken);
         var dtos = _mapper.Map<List<Application.DTOs.AuctionDto>>(auctions);
         await _cache.SetAsync(key, dtos, AuctionListTtl, cancellationToken);
@@ -42,14 +48,17 @@ public class CachedAuctionRepository : IAuctionRepository
         var cachedDto = await _cache.GetAsync<Application.DTOs.AuctionDto>(key, cancellationToken);
         if (cachedDto != null)
         {
+            _logger.LogInformation("Cache HIT for auction {AuctionId}", id);
             return _mapper.Map<Auction>(cachedDto);
         }
 
+        _logger.LogInformation("Cache MISS for auction {AuctionId} - fetching from database", id);
         var auction = await _inner.GetByIdAsync(id, cancellationToken);
         if (auction != null)
         {
             var dto = _mapper.Map<Application.DTOs.AuctionDto>(auction);
             await _cache.SetAsync(key, dto, SingleAuctionTtl, cancellationToken);
+            _logger.LogInformation("Cache SET for auction {AuctionId}", id);
         }
         return auction;
     }

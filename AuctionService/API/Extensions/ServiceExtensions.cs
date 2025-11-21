@@ -30,7 +30,8 @@ namespace AuctionService.API.Extensions
                 var inner = sp.GetRequiredService<AuctionRepository>();
                 var cache = sp.GetRequiredService<ICacheService>();
                 var mapper = sp.GetRequiredService<IMapper>();
-                return new CachedAuctionRepository(inner, cache, mapper);
+                var logger = sp.GetRequiredService<IAppLogger<CachedAuctionRepository>>();
+                return new CachedAuctionRepository(inner, cache, mapper, logger);
             });
 
             services.AddScoped<IAuctionService, AuctionServiceImpl>();
