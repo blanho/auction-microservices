@@ -1,8 +1,5 @@
 namespace Common.Application.DTOs;
 
-/// <summary>
-/// Generic paged result for pagination support
-/// </summary>
 public class PagedResult<T>
 {
     public IEnumerable<T> Items { get; set; } = [];

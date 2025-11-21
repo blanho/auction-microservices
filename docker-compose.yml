@@ -1,0 +1,80 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: shared-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - microservices
+
+  auction-postgres:
+    image: postgres:16
+    container_name: auction-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: auction_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5433:5432"
+    volumes:
+      - auction_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices
+
+  auction-api:
+    build:
+      context: .
+      dockerfile: AuctionService/API/Dockerfile
+      target: final
+    container_name: auction-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_PATHBASE: /auction
+      ConnectionStrings__DefaultConnection: Host=auction-postgres;Port=5432;Database=auction_db;Username=postgres;Password=postgres123
+      ConnectionStrings__Redis: redis:6379
+      Logging__LogLevel__Default: Information
+      Logging__LogLevel__Microsoft.AspNetCore: Warning
+    ports:
+      - "5000:8080"
+    depends_on:
+      - auction-postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auction/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - microservices
+volumes:
+  redis_data:
+    driver: local
+  auction_postgres_data:
+    driver: local
+  auction_api_logs:
+    driver: local
+
+networks:
+  microservices:
+    driver: bridge

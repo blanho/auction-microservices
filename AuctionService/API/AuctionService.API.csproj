@@ -10,11 +10,17 @@
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\AuctionService.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\AuctionService.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\Infrastructure\Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\API\Common.API.csproj" />
   </ItemGroup>
 
 </Project>

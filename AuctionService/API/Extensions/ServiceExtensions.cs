@@ -1,9 +1,12 @@
-using Asp.Versioning;
 using AuctionService.Application.Interfaces;
+using AuctionService.Application.Services;
 using AuctionService.Infrastructure.Data;
 using AuctionService.Infrastructure.Repositories;
-using AuctionService.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Common.Infrastructure.Extensions;
+using Common.Application.Interfaces;
+using AuctionService.Domain.Entities;
+using AuctionService.Infrastructure.Upgrades;
 
 namespace AuctionService.API.Extensions
 {
@@ -16,27 +19,19 @@ namespace AuctionService.API.Extensions
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<IAuctionRepository, AuctionRepository>();
-            services.AddScoped<IAuctionService, AuctionService.Infrastructure.Services.AuctionService>();
+            services.AddCachedRepository<Auction, AuctionRepository>(
+                servicePrefix: "auction",
+                cacheExpiration: TimeSpan.FromMinutes(10));
 
-            return services;
-        }
-
-        public static IServiceCollection AddApiVersioningServices(this IServiceCollection services)
-        {
-            services.AddApiVersioning(options =>
+            services.AddScoped<IAuctionRepository>(provider =>
             {
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.ReportApiVersions = true;
-                options.ApiVersionReader = ApiVersionReader.Combine(
-                    new UrlSegmentApiVersionReader(),
-                    new HeaderApiVersionReader("X-Api-Version"));
-            }).AddApiExplorer(options =>
-            {
-                options.GroupNameFormat = "'v'VVV";
-                options.SubstituteApiVersionInUrl = true;
+                var genericRepo = provider.GetRequiredService<IRepository<Auction>>();
+                return new AuctionRepositoryAdapter(genericRepo);
             });
+
+            services.AddScoped<IAuctionService, AuctionServiceImpl>();
+
+            services.AddAuctionUpgradeTasks();
 
             return services;
         }

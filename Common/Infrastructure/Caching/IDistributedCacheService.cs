@@ -1,0 +1,12 @@
+namespace Common.Infrastructure.Caching;
+
+public interface IDistributedCacheService
+{
+    Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default);
+    Task<string?> GetStringAsync(string key, CancellationToken cancellationToken = default);
+    Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default);
+    Task SetStringAsync(string key, string value, TimeSpan? expiration = null, CancellationToken cancellationToken = default);
+    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default);
+    Task RefreshAsync(string key, CancellationToken cancellationToken = default);
+}

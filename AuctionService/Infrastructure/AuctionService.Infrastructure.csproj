@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\AuctionService.Domain.csproj" />
     <ProjectReference Include="..\Application\AuctionService.Application.csproj" />
+    <ProjectReference Include="..\..\Common\Infrastructure\Common.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

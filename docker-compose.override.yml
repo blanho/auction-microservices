@@ -1,0 +1,8 @@
+services:
+  redis:
+    ports:
+      - "6379:6379"
+
+  auction-postgres:
+    ports:
+      - "5433:5432"

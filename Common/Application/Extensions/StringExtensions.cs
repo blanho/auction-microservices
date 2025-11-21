@@ -1,8 +1,5 @@
 namespace Common.Application.Extensions;
 
-/// <summary>
-/// Common string extension methods
-/// </summary>
 public static class StringExtensions
 {
     public static bool IsNullOrEmpty(this string? value)

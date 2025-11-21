@@ -14,6 +14,11 @@ namespace AuctionService.Infrastructure.Data
             ApplyMigrations(context);
             SeedData(context);
         }
+        
+        public static void InitDbShim(AuctionDbContext context)
+        {
+            SeedData(context);
+        }
 
         private static void ApplyMigrations(AuctionDbContext context)
         {

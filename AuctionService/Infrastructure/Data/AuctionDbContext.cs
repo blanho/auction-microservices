@@ -14,20 +14,17 @@ namespace AuctionService.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Auction configuration
             modelBuilder.Entity<Auction>(entity =>
             {
                 entity.HasKey(a => a.Id);
                 entity.Property(a => a.ReversePrice).HasPrecision(18, 2);
                 entity.Property(a => a.CreatedAt).IsRequired();
-                entity.Property(a => a.UpdatedAt).IsRequired();
                 entity.HasOne(a => a.Item)
                       .WithOne(i => i.Auction)
                       .HasForeignKey<Item>(i => i.AuctionId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // Item configuration
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.ToTable("Items");

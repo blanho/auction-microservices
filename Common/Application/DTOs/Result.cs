@@ -1,8 +1,5 @@
 namespace Common.Application.DTOs;
 
-/// <summary>
-/// Result pattern for consistent success/failure responses
-/// </summary>
 public class Result<T>
 {
     public bool IsSuccess { get; }

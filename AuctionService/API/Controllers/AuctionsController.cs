@@ -27,13 +27,8 @@ namespace AuctionService.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<AuctionDto>> GetAuctionById(Guid id, CancellationToken cancellationToken)
         {
+            // Service throws NotFoundException if not found; middleware converts to 404
             var auction = await _auctionService.GetAuctionByIdAsync(id, cancellationToken);
-
-            if (auction == null)
-            {
-                return NotFound();
-            }
-
             return Ok(auction);
         }
 
@@ -44,11 +39,6 @@ namespace AuctionService.API.Controllers
         {
             var seller = User.Identity?.Name ?? "test";
             var auction = await _auctionService.CreateAuctionAsync(createAuctionDto, seller, cancellationToken);
-
-            if (auction == null)
-            {
-                return BadRequest("Could not save changes to the database");
-            }
 
             return CreatedAtAction(
                 nameof(GetAuctionById),
@@ -62,26 +52,16 @@ namespace AuctionService.API.Controllers
             UpdateAuctionDto updateAuctionDto,
             CancellationToken cancellationToken)
         {
-            var result = await _auctionService.UpdateAuctionAsync(id, updateAuctionDto, cancellationToken);
-
-            if (!result)
-            {
-                return NotFound();
-            }
-
+            // Service throws NotFoundException if auction doesn't exist
+            await _auctionService.UpdateAuctionAsync(id, updateAuctionDto, cancellationToken);
             return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteAuction(Guid id, CancellationToken cancellationToken)
         {
-            var result = await _auctionService.DeleteAuctionAsync(id, cancellationToken);
-
-            if (!result)
-            {
-                return NotFound();
-            }
-
+            // Service throws NotFoundException if auction doesn't exist
+            await _auctionService.DeleteAuctionAsync(id, cancellationToken);
             return NoContent();
         }
     }

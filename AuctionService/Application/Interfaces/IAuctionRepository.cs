@@ -5,6 +5,6 @@ namespace AuctionService.Application.Interfaces
 {
     public interface IAuctionRepository : IRepository<Auction>
     {
-
+        
     }
 }

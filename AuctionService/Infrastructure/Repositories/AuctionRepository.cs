@@ -2,15 +2,19 @@ using AuctionService.Application.Interfaces;
 using AuctionService.Domain.Entities;
 using AuctionService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Common.Application.Abstractions;
 
 namespace AuctionService.Infrastructure.Repositories
 {
     public class AuctionRepository : IAuctionRepository
     {
         private readonly AuctionDbContext _context;
-        public AuctionRepository(AuctionDbContext context)
+        private readonly IDateTimeProvider _dateTime;
+
+        public AuctionRepository(AuctionDbContext context, IDateTimeProvider dateTime)
         {
             _context = context;
+            _dateTime = dateTime;
         }
 
         public async Task<IEnumerable<Auction>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -32,15 +36,18 @@ namespace AuctionService.Infrastructure.Repositories
 
         public async Task<Auction> CreateAsync(Auction auction, CancellationToken cancellationToken = default)
         {
-            auction.CreatedAt = DateTime.UtcNow;
+            auction.CreatedAt = _dateTime.UtcNow;
+            auction.CreatedBy = auction.Seller;
+            
             await _context.Auctions.AddAsync(auction, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            
             return auction;
         }
 
         public async Task<IEnumerable<Auction>> AddRangeAsync(IEnumerable<Auction> auctions, CancellationToken cancellationToken = default)
         {
-            var utcNow = DateTime.UtcNow;
+            var utcNow = _dateTime.UtcNow;
             foreach (var auction in auctions)
             {
                 auction.CreatedAt = utcNow;
@@ -52,14 +59,16 @@ namespace AuctionService.Infrastructure.Repositories
 
         public async Task UpdateAsync(Auction auction, CancellationToken cancellationToken = default)
         {
-            auction.UpdatedAt = DateTime.UtcNow;
+            auction.UpdatedAt = _dateTime.UtcNow;
+            auction.UpdatedBy = auction.Seller;
+            
             _context.Auctions.Update(auction);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateRangeAsync(IEnumerable<Auction> auctions, CancellationToken cancellationToken = default)
         {
-            var utcNow = DateTime.UtcNow;
+            var utcNow = _dateTime.UtcNow;
             foreach (var auction in auctions)
             {
                 auction.UpdatedAt = utcNow;
@@ -74,7 +83,9 @@ namespace AuctionService.Infrastructure.Repositories
             if (auction != null)
             {
                 auction.IsDeleted = true;
-                auction.DeletedAt = DateTime.UtcNow;
+                auction.DeletedAt = _dateTime.UtcNow;
+                auction.DeletedBy = auction.Seller;
+                
                 _context.Auctions.Update(auction);
                 await _context.SaveChangesAsync(cancellationToken);
             }
@@ -84,7 +95,7 @@ namespace AuctionService.Infrastructure.Repositories
         {
             var auctions = await _context.Auctions.Where(a => ids.Contains(a.Id) && !a.IsDeleted).ToListAsync(cancellationToken);
             if (auctions.Count == 0) return;
-            var utcNow = DateTime.UtcNow;
+            var utcNow = _dateTime.UtcNow;
             foreach (var auction in auctions)
             {
                 auction.IsDeleted = true;

@@ -413,5 +413,15 @@ appsettings.Local.json
 .env.local
 
 # Docker
-docker-compose.override.yml
+# docker-compose.override.yml - Keep for development
+**/obj/Docker/
+
+# Redis dumps
+dump.rdb
+*.rdb
+
+# Database files
+*.sqlite
+*.sqlite3
+
 .github
