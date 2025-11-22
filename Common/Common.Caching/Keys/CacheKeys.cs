@@ -1,8 +1,5 @@
-namespace Common.Caching.Keys;
+﻿namespace Common.Caching.Keys;
 
-/// <summary>
-/// Centralized cache key definitions to avoid magic strings.
-/// </summary>
 public static class CacheKeys
 {
     public const string AuctionPrefix = "auction:";

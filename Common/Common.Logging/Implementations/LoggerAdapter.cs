@@ -1,11 +1,8 @@
-using Common.Logging.Abstractions;
+﻿using Common.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Logging.Implementations;
 
-/// <summary>
-/// Adapter wrapping ILogger for application use.
-/// </summary>
 public class LoggerAdapter<T> : ILoggerAdapter<T>
 {
     private readonly ILogger<T> _logger;

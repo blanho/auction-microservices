@@ -29,4 +29,11 @@
     <ProjectReference Include="..\..\Common\Common.OpenApi\Common.OpenApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\Infrastructure\Data\SeedData\*.json" Link="SeedData\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

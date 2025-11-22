@@ -27,7 +27,7 @@ namespace AuctionService.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<AuctionDto>> GetAuctionById(Guid id, CancellationToken cancellationToken)
         {
-            // Service throws NotFoundException if not found; middleware converts to 404
+            
             var auction = await _auctionService.GetAuctionByIdAsync(id, cancellationToken);
             return Ok(auction);
         }
@@ -52,7 +52,7 @@ namespace AuctionService.API.Controllers
             UpdateAuctionDto updateAuctionDto,
             CancellationToken cancellationToken)
         {
-            // Service throws NotFoundException if auction doesn't exist
+            
             await _auctionService.UpdateAuctionAsync(id, updateAuctionDto, cancellationToken);
             return NoContent();
         }
@@ -60,7 +60,7 @@ namespace AuctionService.API.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteAuction(Guid id, CancellationToken cancellationToken)
         {
-            // Service throws NotFoundException if auction doesn't exist
+            
             await _auctionService.DeleteAuctionAsync(id, cancellationToken);
             return NoContent();
         }

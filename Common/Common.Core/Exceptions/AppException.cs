@@ -1,11 +1,7 @@
-#nullable enable
+﻿#nullable enable
 
 namespace Common.Core.Exceptions;
 
-/// <summary>
-/// Base exception for application errors.
-/// Maps to HTTP status codes in API layer.
-/// </summary>
 public abstract class AppException : Exception
 {
     public ErrorCode Code { get; }

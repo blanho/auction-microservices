@@ -1,9 +1,5 @@
-namespace Common.Core.Helpers;
+﻿namespace Common.Core.Helpers;
 
-/// <summary>
-/// Represents the result of an operation with success/failure state.
-/// Use instead of throwing exceptions for expected error flows.
-/// </summary>
 public class Result
 {
     public bool IsSuccess { get; }
@@ -28,9 +24,6 @@ public class Result
     public static Result<T> Failure<T>(Error error) => new(default, false, error);
 }
 
-/// <summary>
-/// Represents the result of an operation that returns a value.
-/// </summary>
 public class Result<T> : Result
 {
     public T? Value { get; }

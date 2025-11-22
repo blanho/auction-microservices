@@ -1,12 +1,9 @@
-using Common.Core.Constants;
+﻿using Common.Core.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Logging.Middleware;
 
-/// <summary>
-/// Middleware for logging HTTP requests/responses with correlation ID.
-/// </summary>
 public class RequestLoggingMiddleware
 {
     private readonly RequestDelegate _next;

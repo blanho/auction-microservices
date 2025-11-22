@@ -1,8 +1,5 @@
-namespace Common.Logging.Abstractions;
+﻿namespace Common.Logging.Abstractions;
 
-/// <summary>
-/// Generic logging abstraction to decouple application from specific logger implementation.
-/// </summary>
 public interface ILoggerAdapter<T>
 {
     void LogInformation(string message, params object[] args);

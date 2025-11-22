@@ -1,108 +1,82 @@
-using AuctionService.Domain.Entities;
+﻿using AuctionService.Domain.Entities;
 using AuctionService.Infrastructure.Data;
 using Common.Core.Constants;
+using System.Text.Json;
 
 namespace AuctionService.Infrastructure.Upgrades;
 
-/// <summary>
-/// Service to seed initial auction data for development/testing.
-/// </summary>
 public static class AuctionSeeder
 {
     public static async Task SeedAuctionsAsync(AuctionDbContext context)
     {
-        // Check if data already exists
+        
         if (context.Auctions.Any())
         {
             return;
         }
 
-        var auctions = new List<Auction>
+        var seedDataPath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "../../../Infrastructure/SeedData/auctions.json"
+        );
+
+        if (!File.Exists(seedDataPath))
         {
-            new Auction
+            throw new FileNotFoundException($"Seed data file not found: {seedDataPath}");
+        }
+
+        var json = await File.ReadAllTextAsync(seedDataPath);
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        var seedData = JsonSerializer.Deserialize<List<AuctionSeedDto>>(json, options)
+            ?? throw new InvalidOperationException("Failed to deserialize seed data");
+
+        var auctions = seedData.Select(dto => new Auction
+        {
+            Id = Guid.NewGuid(),
+            ReversePrice = dto.ReversePrice,
+            Seller = dto.Seller,
+            Winner = null,
+            SoldAmount = null,
+            CurrentHighBid = null,
+            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedBy = SystemGuids.System,
+            AuctionEnd = DateTimeOffset.UtcNow.AddDays(dto.AuctionEndDays),
+            Status = Status.Live,
+            IsDeleted = false,
+            Item = new Item
             {
                 Id = Guid.NewGuid(),
-                ReversePrice = 50000,
-                Seller = "John Doe",
-                Winner = null,
-                SoldAmount = null,
-                CurrentHighBid = null,
+                Make = dto.Item.Make,
+                Model = dto.Item.Model,
+                Year = dto.Item.Year,
+                Color = dto.Item.Color,
+                Mileage = dto.Item.Mileage,
+                ImageUrl = dto.Item.ImageUrl,
                 CreatedAt = DateTimeOffset.UtcNow,
                 CreatedBy = SystemGuids.System,
-                AuctionEnd = DateTimeOffset.UtcNow.AddDays(7),
-                Status = Status.Live,
-                IsDeleted = false,
-                Item = new Item
-                {
-                    Id = Guid.NewGuid(),
-                    Make = "Toyota",
-                    Model = "Camry",
-                    Year = 2020,
-                    Color = "Silver",
-                    Mileage = 45000,
-                    ImageUrl = "https://via.placeholder.com/300",
-                    CreatedAt = DateTimeOffset.UtcNow,
-                    CreatedBy = SystemGuids.System,
-                    IsDeleted = false
-                }
-            },
-            new Auction
-            {
-                Id = Guid.NewGuid(),
-                ReversePrice = 75000,
-                Seller = "Jane Smith",
-                Winner = null,
-                SoldAmount = null,
-                CurrentHighBid = null,
-                CreatedAt = DateTimeOffset.UtcNow,
-                CreatedBy = SystemGuids.System,
-                AuctionEnd = DateTimeOffset.UtcNow.AddDays(10),
-                Status = Status.Live,
-                IsDeleted = false,
-                Item = new Item
-                {
-                    Id = Guid.NewGuid(),
-                    Make = "Honda",
-                    Model = "Civic",
-                    Year = 2021,
-                    Color = "Blue",
-                    Mileage = 32000,
-                    ImageUrl = "https://via.placeholder.com/300",
-                    CreatedAt = DateTimeOffset.UtcNow,
-                    CreatedBy = SystemGuids.System,
-                    IsDeleted = false
-                }
-            },
-            new Auction
-            {
-                Id = Guid.NewGuid(),
-                ReversePrice = 120000,
-                Seller = "Bob Johnson",
-                Winner = null,
-                SoldAmount = null,
-                CurrentHighBid = null,
-                CreatedAt = DateTimeOffset.UtcNow,
-                CreatedBy = SystemGuids.System,
-                AuctionEnd = DateTimeOffset.UtcNow.AddDays(5),
-                Status = Status.Live,
-                IsDeleted = false,
-                Item = new Item
-                {
-                    Id = Guid.NewGuid(),
-                    Make = "BMW",
-                    Model = "X5",
-                    Year = 2022,
-                    Color = "Black",
-                    Mileage = 15000,
-                    ImageUrl = "https://via.placeholder.com/300",
-                    CreatedAt = DateTimeOffset.UtcNow,
-                    CreatedBy = SystemGuids.System,
-                    IsDeleted = false
-                }
+                IsDeleted = false
             }
-        };
+        }).ToList();
 
         await context.Auctions.AddRangeAsync(auctions);
         await context.SaveChangesAsync();
+    }
+
+    private class AuctionSeedDto
+    {
+        public int ReversePrice { get; set; }
+        public string Seller { get; set; }
+        public int AuctionEndDays { get; set; }
+        public ItemSeedDto Item { get; set; }
+    }
+
+    private class ItemSeedDto
+    {
+        public string Make { get; set; }
+        public string Model { get; set; }
+        public int Year { get; set; }
+        public string Color { get; set; }
+        public int Mileage { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

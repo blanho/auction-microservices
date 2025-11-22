@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using Common.Core.Constants;
 using Common.Core.Exceptions;
 using Microsoft.AspNetCore.Builder;
@@ -7,16 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Common.OpenApi.Middleware;
 
-/// <summary>
-/// Exception handling middleware for mapping AppException types to ProblemDetails.
-/// Can be used across all services for consistent error handling.
-/// </summary>
 public static class ExceptionHandlingMiddleware
 {
-    /// <summary>
-    /// Handles AppException types and maps them to ProblemDetails with appropriate HTTP status codes.
-    /// Also handles common framework exceptions (ArgumentException, UnauthorizedAccessException).
-    /// </summary>
+    
+    
+    
+    
     public static IApplicationBuilder UseAppExceptionHandling(this IApplicationBuilder app)
     {
         app.Use(async (context, next) =>
@@ -37,9 +33,9 @@ public static class ExceptionHandlingMiddleware
         return app;
     }
 
-    /// <summary>
-    /// Legacy method name for backward compatibility. Use UseAppExceptionHandling instead.
-    /// </summary>
+    
+    
+    
     public static IApplicationBuilder UseCommonExceptionHandling(this IApplicationBuilder app)
         => UseAppExceptionHandling(app);
 
@@ -64,13 +60,13 @@ public static class ExceptionHandlingMiddleware
             Instance = context.Request.Path
         };
 
-        // Include validation errors when present
+        
         if (ex is ValidationAppException vex && vex.Errors.Count > 0)
         {
             problem.Extensions["errors"] = vex.Errors;
         }
 
-        // Attach correlation id when available
+        
         if (context.Request.Headers.TryGetValue(HeaderConstants.CorrelationId, out var cid))
         {
             problem.Extensions["correlationId"] = cid.ToString();
@@ -83,12 +79,12 @@ public static class ExceptionHandlingMiddleware
 
     private static Task WriteGenericExceptionAsync(HttpContext context, Exception ex)
     {
-        // Default to 500 Internal Server Error for unexpected exceptions
+        
         var status = HttpStatusCode.InternalServerError;
         var title = "An unexpected error occurred.";
         var detail = ex.Message;
 
-        // Map common exception types
+        
         if (ex is ArgumentException or ArgumentNullException)
         {
             status = HttpStatusCode.BadRequest;
@@ -109,7 +105,7 @@ public static class ExceptionHandlingMiddleware
             Instance = context.Request.Path
         };
 
-        // Attach correlation id when available
+        
         if (context.Request.Headers.TryGetValue(HeaderConstants.CorrelationId, out var cid))
         {
             problem.Extensions["correlationId"] = cid.ToString();

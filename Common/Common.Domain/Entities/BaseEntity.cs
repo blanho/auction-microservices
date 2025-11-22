@@ -1,11 +1,7 @@
-#nullable enable
+﻿#nullable enable
 
 namespace Common.Domain.Entities;
 
-/// <summary>
-/// Base entity with common audit properties for all domain entities.
-/// Provides tracking for creation, updates, and soft deletes.
-/// </summary>
 public abstract class BaseEntity
 {
     public Guid Id { get; set; }

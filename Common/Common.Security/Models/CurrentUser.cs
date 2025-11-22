@@ -1,8 +1,5 @@
-namespace Common.Security.Models;
+﻿namespace Common.Security.Models;
 
-/// <summary>
-/// Represents the currently authenticated user.
-/// </summary>
 public sealed record CurrentUser
 {
     public string UserId { get; init; } = string.Empty;

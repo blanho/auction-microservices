@@ -1,8 +1,5 @@
-namespace Common.Logging.Models;
+﻿namespace Common.Logging.Models;
 
-/// <summary>
-/// Context information attached to log entries.
-/// </summary>
 public sealed record LogContext
 {
     public string? CorrelationId { get; init; }

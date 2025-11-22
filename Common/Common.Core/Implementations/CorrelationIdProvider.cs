@@ -2,9 +2,6 @@ using Common.Core.Interfaces;
 
 namespace Common.Core.Implementations;
 
-/// <summary>
-/// Thread-safe correlation ID provider using AsyncLocal.
-/// </summary>
 public class CorrelationIdProvider : ICorrelationIdProvider
 {
     private static readonly AsyncLocal<string?> _correlationId = new();

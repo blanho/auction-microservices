@@ -1,11 +1,7 @@
-#nullable enable
+﻿#nullable enable
 
 namespace Common.Repository.Interfaces;
 
-/// <summary>
-/// Generic repository interface for data access operations.
-/// Provides standard CRUD operations for entities.
-/// </summary>
 public interface IRepository<T> where T : class
 {
     Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);

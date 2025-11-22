@@ -1,4 +1,4 @@
-using AuctionService.Application.DTOs;
+﻿using AuctionService.Application.DTOs;
 using AuctionService.Application.Interfaces;
 using AutoMapper;
 using Common.Core.Exceptions;
@@ -30,7 +30,7 @@ public class AuctionServiceImpl : IAuctionService
     {
         _logger.LogInformation("Fetching all auctions at {Timestamp}", _dateTime.UtcNow);
 
-        // Repository is automatically cached via CachedRepository decorator
+        
         var auctions = await _repository.GetAllAsync(cancellationToken);
         var result = auctions.Select(a => _mapper.Map<AuctionDto>(a)).ToList();
         
@@ -42,7 +42,7 @@ public class AuctionServiceImpl : IAuctionService
     {
         _logger.LogInformation("Fetching auction {AuctionId}", id);
 
-        // Repository is automatically cached via CachedRepository decorator
+        
         var auction = await _repository.GetByIdAsync(id, cancellationToken);
         
         if (auction == null)
@@ -61,7 +61,7 @@ public class AuctionServiceImpl : IAuctionService
         var auction = _mapper.Map<Domain.Entities.Auction>(dto);
         auction.Seller = seller;
         
-        // Repository automatically handles cache invalidation via decorator
+        
         var createdAuction = await _repository.CreateAsync(auction, cancellationToken);
         
         _logger.LogInformation("Created auction {AuctionId} for seller {Seller}", createdAuction.Id, seller);
@@ -86,7 +86,7 @@ public class AuctionServiceImpl : IAuctionService
         auction.Item.Mileage = dto.Mileage ?? auction.Item.Mileage;
         auction.Item.Year = dto.Year ?? auction.Item.Year;
         
-        // Repository automatically handles cache invalidation via decorator
+        
         await _repository.UpdateAsync(auction, cancellationToken);
         
         _logger.LogInformation("Updated auction {AuctionId}", id);
@@ -105,7 +105,7 @@ public class AuctionServiceImpl : IAuctionService
             throw new NotFoundException($"Auction with ID {id} was not found");
         }
 
-        // Repository automatically handles cache invalidation via decorator
+        
         await _repository.DeleteAsync(id, cancellationToken);
         
         _logger.LogInformation("Deleted auction {AuctionId}", id);

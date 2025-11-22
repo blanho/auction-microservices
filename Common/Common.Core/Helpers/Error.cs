@@ -1,8 +1,5 @@
-namespace Common.Core.Helpers;
+﻿namespace Common.Core.Helpers;
 
-/// <summary>
-/// Represents a domain or application error with code and message.
-/// </summary>
 public sealed record Error
 {
     public string Code { get; }

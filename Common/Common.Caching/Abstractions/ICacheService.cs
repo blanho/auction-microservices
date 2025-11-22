@@ -1,8 +1,5 @@
-namespace Common.Caching.Abstractions;
+﻿namespace Common.Caching.Abstractions;
 
-/// <summary>
-/// Abstraction for distributed caching operations.
-/// </summary>
 public interface ICacheService
 {
     Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default);

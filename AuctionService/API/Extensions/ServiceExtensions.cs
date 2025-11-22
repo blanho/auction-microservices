@@ -1,4 +1,4 @@
-using AuctionService.Application.Interfaces;
+﻿using AuctionService.Application.Interfaces;
 using AuctionService.Application.Services;
 using AuctionService.Infrastructure.Data;
 using AuctionService.Infrastructure.Repositories;
@@ -15,9 +15,9 @@ namespace AuctionService.API.Extensions
 {
     public static class ServiceExtensions
     {
-        /// <summary>
-        /// Configures Serilog for the application.
-        /// </summary>
+        
+        
+        
         public static WebApplicationBuilder AddApplicationLogging(this WebApplicationBuilder builder)
         {
             builder.Host.UseSerilog((context, loggerConfig) =>
@@ -39,10 +39,10 @@ namespace AuctionService.API.Extensions
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
-            // Register generic logger
+            
             services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
             
-            services.AddScoped<AuctionRepository>(); // inner
+            services.AddScoped<AuctionRepository>(); 
             services.AddScoped<IAuctionRepository>(sp =>
             {
                 var inner = sp.GetRequiredService<AuctionRepository>();

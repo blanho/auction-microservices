@@ -1,11 +1,8 @@
-using Common.Repository.Interfaces;
+﻿using Common.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Repository.Implementations;
 
-/// <summary>
-/// Default implementation of IAppLogger that wraps ILogger from Microsoft.Extensions.Logging.
-/// </summary>
 public class AppLogger<T> : IAppLogger<T>
 {
     private readonly ILogger<T> _logger;

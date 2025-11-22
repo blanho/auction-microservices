@@ -1,12 +1,9 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Common.Caching.Abstractions;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Common.Caching.Implementations;
 
-/// <summary>
-/// Redis-backed distributed cache service.
-/// </summary>
 public class RedisCacheService : ICacheService
 {
     private readonly IDistributedCache _cache;

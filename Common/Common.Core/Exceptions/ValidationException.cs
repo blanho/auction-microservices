@@ -1,9 +1,5 @@
-namespace Common.Core.Exceptions;
+﻿namespace Common.Core.Exceptions;
 
-/// <summary>
-/// Exception for validation errors (e.g., from FluentValidation or manual checks).
-/// Contains dictionary of field-level errors.
-/// </summary>
 public sealed class ValidationException : Exception
 {
     public IReadOnlyDictionary<string, string[]> Errors { get; }

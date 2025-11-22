@@ -1,11 +1,8 @@
-using Common.Caching.Abstractions;
+﻿using Common.Caching.Abstractions;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Common.Caching.Implementations;
 
-/// <summary>
-/// Redis-backed distributed lock using SET NX EX pattern.
-/// </summary>
 public class RedisDistributedLock : IDistributedLock
 {
     private readonly IDistributedCache _cache;

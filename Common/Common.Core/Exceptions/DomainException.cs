@@ -1,9 +1,5 @@
-namespace Common.Core.Exceptions;
+﻿namespace Common.Core.Exceptions;
 
-/// <summary>
-/// Base exception for domain invariant violations.
-/// Use for business rule failures within entities/value objects.
-/// </summary>
 public abstract class DomainException : Exception
 {
     protected DomainException(string message) : base(message) { }
